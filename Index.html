@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Venshot — VC | Startups | Business Frameworks</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --border: #1e1e1e;
+    --accent: #c8ff00;
+    --accent2: #ff6b35;
+    --text: #f0f0f0;
+    --muted: #6b6b6b;
+    --card: #141414;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Noise texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.4;
+  }
+
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    padding: 60px 0 48px;
+    animation: fadeUp 0.7s ease both;
+  }
+
+  .tag {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 4px 10px;
+    margin-bottom: 24px;
+  }
+
+  .brand-name {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(52px, 12vw, 86px);
+    font-weight: 800;
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    margin-bottom: 6px;
+  }
+
+  .brand-name .slash {
+    color: var(--accent);
+    font-style: normal;
+  }
+
+  .tagline {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(16px, 3.5vw, 20px);
+    font-style: italic;
+    color: var(--muted);
+    margin: 16px 0 32px;
+    letter-spacing: 0.01em;
+  }
+
+  .bio-block {
+    border-left: 2px solid var(--accent);
+    padding-left: 16px;
+    margin-bottom: 40px;
+  }
+
+  .bio-block p {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: #aaa;
+    line-height: 1.8;
+  }
+
+  .bio-block strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* ── SOCIAL LINKS ── */
+  .links-section {
+    margin-bottom: 56px;
+    animation: fadeUp 0.7s 0.1s ease both;
+  }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .link-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 18px 20px;
+    margin-bottom: 8px;
+    text-decoration: none;
+    color: var(--text);
+    transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .link-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--accent);
+    transform: scaleY(0);
+    transition: transform 0.2s;
+    transform-origin: bottom;
+  }
+
+  .link-card:hover {
+    border-color: #333;
+    background: #191919;
+    transform: translateX(4px);
+  }
+
+  .link-card:hover::before {
+    transform: scaleY(1);
+  }
+
+  .link-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .link-icon {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .link-info .link-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+
+  .link-info .link-sub {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  .link-arrow {
+    color: var(--muted);
+    font-size: 18px;
+    transition: color 0.2s, transform 0.2s;
+  }
+
+  .link-card:hover .link-arrow {
+    color: var(--accent);
+    transform: translateX(4px);
+  }
+
+  /* ── CONTENT PILLARS ── */
+  .pillars-section {
+    margin-bottom: 56px;
+    animation: fadeUp 0.7s 0.2s ease both;
+  }
+
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .pillar-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 20px 18px;
+    transition: border-color 0.2s;
+  }
+
+  .pillar-card:hover {
+    border-color: #333;
+  }
+
+  .pillar-num {
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .pillar-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+
+  .pillar-desc {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* ── FEATURED TOPICS / HOOKS ── */
+  .hooks-section {
+    margin-bottom: 56px;
+    animation: fadeUp 0.7s 0.3s ease both;
+  }
+
+  .hook-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hook-item:last-child { border-bottom: none; }
+
+  .hook-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    margin-top: 7px;
+    flex-shrink: 0;
+  }
+
+  .hook-text {
+    font-size: 13px;
+    color: #ccc;
+    line-height: 1.5;
+  }
+
+  .hook-text em {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    color: var(--text);
+    font-size: 14px;
+  }
+
+  /* ── EARN SECTION ── */
+  .earn-section {
+    margin-bottom: 56px;
+    animation: fadeUp 0.7s 0.35s ease both;
+  }
+
+  .earn-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+  }
+
+  .earn-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 18px 14px;
+    text-align: center;
+  }
+
+  .earn-stage {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .earn-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .earn-desc {
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── NEWSLETTER SIGNUP ── */
+  .newsletter-section {
+    margin-bottom: 56px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 32px 28px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.7s 0.4s ease both;
+  }
+
+  .newsletter-section::after {
+    content: 'VS';
+    position: absolute;
+    right: -10px;
+    bottom: -20px;
+    font-family: 'Syne', sans-serif;
+    font-size: 120px;
+    font-weight: 800;
+    color: #fff;
+    opacity: 0.02;
+    pointer-events: none;
+    letter-spacing: -0.05em;
+  }
+
+  .newsletter-section h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+  }
+
+  .newsletter-section p {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 20px;
+    line-height: 1.7;
+  }
+
+  .input-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .input-row input {
+    flex: 1;
+    min-width: 180px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .input-row input:focus { border-color: var(--accent); }
+  .input-row input::placeholder { color: var(--muted); }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 12px 20px;
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: opacity 0.2s, transform 0.15s;
+    white-space: nowrap;
+  }
+
+  .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 32px 0 48px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    animation: fadeUp 0.7s 0.5s ease both;
+  }
+
+  .footer-brand {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .footer-brand .slash { color: var(--accent); }
+
+  .footer-note {
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* ── TICKER ── */
+  .ticker-wrap {
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 0;
+    margin-bottom: 48px;
+    white-space: nowrap;
+  }
+
+  .ticker-track {
+    display: inline-block;
+    animation: ticker 22s linear infinite;
+  }
+
+  .ticker-track span {
+    display: inline-block;
+    padding: 0 28px;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .ticker-track span em {
+    color: var(--accent);
+    font-style: normal;
+    font-weight: 500;
+  }
+
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Responsive */
+  @media (max-width: 500px) {
+    .pillars-grid { grid-template-columns: 1fr; }
+    .earn-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <div class="tag">Learning in public · Jaipur → VC</div>
+    <div class="brand-name">VEN<span class="slash">/</span>SHOT</div>
+    <p class="tagline">VC · Startups · Business Frameworks</p>
+    <div class="bio-block">
+      <p>
+        <strong>Building my career in venture capital.</strong><br/>
+        I break down startups, ideas &amp; business frameworks — simply.<br/>
+        Helping ambitious people think like <strong>founders &amp; investors.</strong>
+      </p>
+    </div>
+  </header>
+
+</div>
+
+<!-- Ticker -->
+<div class="ticker-wrap">
+  <div class="ticker-track">
+    <span>Startup Breakdowns <em>↗</em></span>
+    <span>Venture Thinking <em>↗</em></span>
+    <span>Unit Economics <em>↗</em></span>
+    <span>Founder Frameworks <em>↗</em></span>
+    <span>VC Lens <em>↗</em></span>
+    <span>CAC · LTV · PMF · Moats <em>↗</em></span>
+    <span>Learning in Public <em>↗</em></span>
+    <span>Startup Breakdowns <em>↗</em></span>
+    <span>Venture Thinking <em>↗</em></span>
+    <span>Unit Economics <em>↗</em></span>
+    <span>Founder Frameworks <em>↗</em></span>
+    <span>VC Lens <em>↗</em></span>
+    <span>CAC · LTV · PMF · Moats <em>↗</em></span>
+    <span>Learning in Public <em>↗</em></span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- SOCIAL LINKS -->
+  <div class="links-section">
+    <div class="section-label">Find me on</div>
+
+    <a class="link-card" href="https://instagram.com/venshot" target="_blank">
+      <div class="link-left">
+        <div class="link-icon">📸</div>
+        <div class="link-info">
+          <div class="link-title">Instagram</div>
+          <div class="link-sub">@venshot — carousels, reels &amp; frameworks</div>
+        </div>
+      </div>
+      <div class="link-arrow">→</div>
+    </a>
+
+    <a class="link-card" href="https://linkedin.com/in/venshot" target="_blank">
+      <div class="link-left">
+        <div class="link-icon">💼</div>
+        <div class="link-info">
+          <div class="link-title">LinkedIn</div>
+          <div class="link-sub">Professional credibility &amp; opportunities</div>
+        </div>
+      </div>
+      <div class="link-arrow">→</div>
+    </a>
+
+    <a class="link-card" href="https://twitter.com/venshot" target="_blank">
+      <div class="link-left">
+        <div class="link-icon">𝕏</div>
+        <div class="link-info">
+          <div class="link-title">X / Twitter</div>
+          <div class="link-sub">Startup threads &amp; hot takes</div>
+        </div>
+      </div>
+      <div class="link-arrow">→</div>
+    </a>
+
+    <a class="link-card" href="mailto:hello@venshot.in" target="_blank">
+      <div class="link-left">
+        <div class="link-icon">✉</div>
+        <div class="link-info">
+          <div class="link-title">Work with me</div>
+          <div class="link-sub">Consulting, collabs &amp; startup reviews</div>
+        </div>
+      </div>
+      <div class="link-arrow">→</div>
+    </a>
+
+  </div>
+
+  <!-- PILLARS -->
+  <div class="pillars-section">
+    <div class="section-label">Content Pillars</div>
+    <div class="pillars-grid">
+      <div class="pillar-card">
+        <div class="pillar-num">01 —</div>
+        <div class="pillar-title">Startup Breakdowns</div>
+        <div class="pillar-desc">Why startups succeed or fail. How Zepto, Meesho, CRED actually make money.</div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-num">02 —</div>
+        <div class="pillar-title">Venture Thinking</div>
+        <div class="pillar-desc">What VCs look for. How founders raise. Market sizing. "Would I invest?"</div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-num">03 —</div>
+        <div class="pillar-title">Business Frameworks</div>
+        <div class="pillar-desc">CAC/LTV, PMF, moats, unit economics — explained simply.</div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-num">04 —</div>
+        <div class="pillar-title">My Journey</div>
+        <div class="pillar-desc">23, Jaipur, CFA background, breaking into VC. Learning out loud.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOOKS -->
+  <div class="hooks-section">
+    <div class="section-label">What I write about</div>
+    <div class="hook-item">
+      <div class="hook-dot"></div>
+      <div class="hook-text"><em>"What I learned after reviewing 20 startup decks"</em></div>
+    </div>
+    <div class="hook-item">
+      <div class="hook-dot"></div>
+      <div class="hook-text"><em>"3 frameworks VCs use to evaluate any startup in 5 minutes"</em></div>
+    </div>
+    <div class="hook-item">
+      <div class="hook-dot"></div>
+      <div class="hook-text"><em>"If I had ₹10L to invest, here's where I'd look"</em></div>
+    </div>
+    <div class="hook-item">
+      <div class="hook-dot"></div>
+      <div class="hook-text"><em>"Why I chose VC over a higher-paying wealth management role"</em></div>
+    </div>
+    <div class="hook-item">
+      <div class="hook-dot"></div>
+      <div class="hook-text"><em>"How Zepto built ₹4,000 Cr GMV with a model most people said wouldn't work"</em></div>
+    </div>
+  </div>
+
+  <!-- EARN SECTION -->
+  <div class="earn-section">
+    <div class="section-label">Monetisation Roadmap</div>
+    <div class="earn-grid">
+      <div class="earn-card">
+        <div class="earn-stage">0–6 months</div>
+        <div class="earn-title">Build Audience</div>
+        <div class="earn-desc">Consistent posts, investment memos, carousels. Track record in public.</div>
+      </div>
+      <div class="earn-card">
+        <div class="earn-stage">6–12 months</div>
+        <div class="earn-title">Consulting + Collabs</div>
+        <div class="earn-desc">Startup deck reviews, brand deals, paid newsletters &amp; workshops.</div>
+      </div>
+      <div class="earn-card">
+        <div class="earn-stage">12 months+</div>
+        <div class="earn-title">Community + VC</div>
+        <div class="earn-desc">Paid community, own fund/sidecar, or direct VC role via brand pull.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEWSLETTER -->
+  <div class="newsletter-section">
+    <h3>The Venshot Brief</h3>
+    <p>One startup breakdown. One VC insight. One framework. Every week.<br/>No fluff. No corporate speak.</p>
+    <div class="input-row">
+      <input type="email" placeholder="your@email.com"/>
+      <button class="btn-primary">Subscribe →</button>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-brand">VEN<span class="slash">/</span>SHOT</div>
+    <div class="footer-note">Built in public · Jaipur, India · 2025</div>
+  </footer>
+
+</div>
+
+</body>
+</html>
